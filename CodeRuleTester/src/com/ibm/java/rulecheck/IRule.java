@@ -1,4 +1,4 @@
-package com.ibm.java.rulechek;
+package com.ibm.java.rulecheck;
 
 import java.io.File;
 import java.util.ArrayList;

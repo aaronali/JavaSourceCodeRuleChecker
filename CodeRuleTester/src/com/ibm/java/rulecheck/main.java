@@ -1,4 +1,4 @@
-package com.ibm.java.rulechek;
+package com.ibm.java.rulecheck;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -116,12 +116,12 @@ public class main {
 		HashMap<File,ArrayList<ErrorLine>> temp = new HashMap<File, ArrayList<ErrorLine>>();
 		int errorCount = 0;
 		ArrayList<IRule> rulesToCheck = new ArrayList<IRule>();
-		
-		rulesToCheck.add(new CustomRule_CheckForGC());
-		rulesToCheck.add(new CustomRule_CheckForRuntimeException());
-		rulesToCheck.add(new CustomRule_CheckForGeneralException());
-		rulesToCheck.add(new CustomRule_CheckForSystemPrint());
-		
+//		
+//		rulesToCheck.add(new CustomRule_CheckForGC());
+//		rulesToCheck.add(new CustomRule_CheckForRuntimeException());
+//		rulesToCheck.add(new CustomRule_CheckForGeneralException());
+//		rulesToCheck.add(new CustomRule_CheckForSystemPrint());
+		rulesToCheck.add(new CustomRule_CheckForVariablesCreatedInLoop());
 		printFnames("//Users//aaronali//Documents/DICE//");
 			for(File file: classList){ 
 			  String s = readFile(file.getAbsolutePath());
@@ -143,9 +143,14 @@ public class main {
 				 System.out.println();
 				 System.out.println("FileError:" + errorCount);
 			 System.out.println(file.getName());
-			 for(ErrorLine er:errs.get(file)){
-				 System.out.println(er.lineNumber+ " " + er.lineText.trim());
-			 }
+			 try {
+				for(ErrorLine er:errs.get(file.getCanonicalFile())){
+					 System.out.println(er.lineNumber+ " " + er.lineText.trim());
+				 }
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			}
 		}
 	

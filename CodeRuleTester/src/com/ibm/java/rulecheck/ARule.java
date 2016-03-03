@@ -1,4 +1,4 @@
-package com.ibm.java.rulechek;
+package com.ibm.java.rulecheck;
 
  
 public abstract class ARule implements IRule {

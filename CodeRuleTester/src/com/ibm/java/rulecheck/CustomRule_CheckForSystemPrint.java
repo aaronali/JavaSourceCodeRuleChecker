@@ -1,4 +1,4 @@
-package com.ibm.java.rulechek;
+package com.ibm.java.rulecheck;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,21 +10,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CustomRule_CheckForGeneralException extends ARule {
+public class CustomRule_CheckForSystemPrint extends ARule {
 
-	public CustomRule_CheckForGeneralException() {
+	public CustomRule_CheckForSystemPrint() {
 		super(); 
 	}
  
 	@Override
 	public Map<File, ArrayList<ErrorLine>> getResults(Object... args) {
-		return checkForGeneralException((File)args[0], "new Exception",  "throws Exception");
+		return checkForRuntimeException((File)args[0], "System.print");
 	}
 	
 	
-	public static HashMap<File,ArrayList<ErrorLine>> checkForGeneralException(File  file, String... searchTerms){
+	public static HashMap<File,ArrayList<ErrorLine>> checkForRuntimeException(File  file, String searchTerm){
 		 
-		
 		   HashMap<File,ArrayList<ErrorLine>> errs = new HashMap<File,ArrayList<ErrorLine>>();
 		  
 			try {
@@ -33,8 +32,8 @@ public class CustomRule_CheckForGeneralException extends ARule {
 				String line = null;
 				int lineCount = 0;
 				while ((line = reader.readLine()) != null) {
-					lineCount++; 
-					 if(line.contains(searchTerms[0]) || line.contains(searchTerms[1])){ 
+					lineCount++;
+					 if(line.contains(searchTerm)){ 
 						 if(errs.containsKey(file)){
 							 errs.get(file).add(new ErrorLine(lineCount,line));
 						 }else{
