@@ -125,7 +125,7 @@ public class main {
 //		 rulesToCheck.add(new CustomRule_CheckForNonLocalVariablesInLoop());
 //		 rulesToCheck.add(new CustomRule_CheckForFindingLoops());
 		
-		loadFiles("//Users//aaronali//Documents/DICE//");
+		loadFiles("Root_Directory_of_source_code");
 			for(File file: classList){ 
 			  String s = readFile(file.getAbsolutePath());
 			  for(int i=0;i<rulesToCheck.size();i++){
