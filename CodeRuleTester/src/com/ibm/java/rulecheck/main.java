@@ -65,7 +65,7 @@ public class main {
 		}
 		return strings; 
 	}
-	public static void  printFnames(String sDir){
+	public static void  loadFiles(String sDir){
 		  File[] faFiles = new File(sDir).listFiles();
 		  for(File file: faFiles){
 		    if(file.getName().matches("^(.*?)")){
@@ -73,7 +73,7 @@ public class main {
 					classList.add(file);
 		    }
 		    if(file.isDirectory()){
-		      printFnames(file.getAbsolutePath());
+		      loadFiles(file.getAbsolutePath());
 		    }
 		  }
 		}
@@ -116,19 +116,25 @@ public class main {
 		HashMap<File,ArrayList<ErrorLine>> temp = new HashMap<File, ArrayList<ErrorLine>>();
 		int errorCount = 0;
 		ArrayList<IRule> rulesToCheck = new ArrayList<IRule>();
-//		
-//		rulesToCheck.add(new CustomRule_CheckForGC());
-//		rulesToCheck.add(new CustomRule_CheckForRuntimeException());
-//		rulesToCheck.add(new CustomRule_CheckForGeneralException());
-//		rulesToCheck.add(new CustomRule_CheckForSystemPrint());
-		rulesToCheck.add(new CustomRule_CheckForVariablesCreatedInLoop());
-		printFnames("//Users//aaronali//Documents/DICE//");
+ 		
+// 	  	rulesToCheck.add(new CustomRule_CheckForGC());
+// 	 	rulesToCheck.add(new CustomRule_CheckForRuntimeException());
+// 	    rulesToCheck.add(new CustomRule_CheckForGeneralException());
+		rulesToCheck.add(new CustomRule_CheckForSystemPrint());
+//	 	rulesToCheck.add(new CustomRule_CheckForVariablesCreatedInLoop());
+//		 rulesToCheck.add(new CustomRule_CheckForNonLocalVariablesInLoop());
+//		 rulesToCheck.add(new CustomRule_CheckForFindingLoops());
+		
+		loadFiles("//Users//aaronali//Documents/DICE//");
 			for(File file: classList){ 
 			  String s = readFile(file.getAbsolutePath());
 			  for(int i=0;i<rulesToCheck.size();i++){
-				 
+				 try{
 			  	temp = (HashMap<File, ArrayList<ErrorLine>>) rulesToCheck.get(i).getResults(file);
-			 	if(temp!=null && temp.size()>0){
+				 }catch(Exception e){
+				 }
+			 		if(temp!=null && temp.size()>0){
+			 
 			 		errs.put(file, temp.get(file));
 			 		 
 			 	}

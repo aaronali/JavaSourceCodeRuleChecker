@@ -10,19 +10,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CustomRule_CheckForSystemPrint extends ARule {
-
-	public CustomRule_CheckForSystemPrint() {
+public class CustomRule_CheckForFindingLoops extends ARule { 
+	
+	public CustomRule_CheckForFindingLoops() {
 		super(); 
 	}
  
 	@Override
 	public Map<File, ArrayList<ErrorLine>> getResults(Object... args) {
-		return checkForRuntimeException((File)args[0], ".print","System.out" );
+		return checkForFindingLoops((File) args[0]);
 	}
 	
 	
-	public static HashMap<File,ArrayList<ErrorLine>> checkForRuntimeException(File  file, String... searchTerm){
+	public static HashMap<File,ArrayList<ErrorLine>> checkForFindingLoops(File  file){
 		 
 		   HashMap<File,ArrayList<ErrorLine>> errs = new HashMap<File,ArrayList<ErrorLine>>();
 		  
@@ -31,17 +31,23 @@ public class CustomRule_CheckForSystemPrint extends ARule {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 				String line = null;
 				int lineCount = 0;
+				int nestedLooop = 0; 
+ 
 				while ((line = reader.readLine()) != null) {
 					lineCount++;
-					 if(line.contains(searchTerm[0] )|| line.contains(searchTerm[1])){ 
-						 if(errs.containsKey(file)){
-							 errs.get(file).add(new ErrorLine(lineCount,line));
-						 }else{
-							 errs.put(file,new  ArrayList<ErrorLine>());
-							 errs.get(file).add(new ErrorLine(lineCount,line));
-						 }
-					 }
+					  for (JavaLoop jl: JavaLoop.values())  {
+						  if(!line.trim().startsWith("*") && !line.trim().startsWith("/")){
+							   if(line.contains(" "+jl.name().toLowerCase())){
+								   if(!errs.containsKey(file)){
+									   errs.put(file, new ArrayList<ErrorLine>());
+								   } 
+								   errs.get(file).add(new ErrorLine(lineCount,"**POSSIBILE LOOP TO CHECK   ->".concat(line)));
+								 
+							  } 
+						  }
+					   }
 				}
+					 
 			} catch (IOException e) {
 				System.err.println(e);
 			}
